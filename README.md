@@ -3,117 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IronSoulAI | kuponAi Terminal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>IronSoulAI | kuponAi Terminal v5.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Plus+Jakarta+Sans:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-blue: #00f2ff;
-            --neon-purple: #7000ff;
-            --bg: #050505;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(0, 242, 255, 0.2);
+            --neon: #00f2ff;
+            --purple: #7000ff;
+            --bg: #020408;
+            --card: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 242, 255, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
-        /* Arka Plan Görseli */
-        .background-overlay {
+        /* Dinamik Arka Plan */
+        .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('tema.jpg') center/cover no-repeat;
-            z-index: -1; filter: blur(5px);
+            background: linear-gradient(rgba(2,4,8,0.9), rgba(2,4,8,0.9)), url('tema.jpg') center/cover no-repeat;
+            z-index: -1; filter: saturate(1.2);
         }
 
         /* Navigasyon */
         nav {
             padding: 20px 8%; display: flex; justify-content: space-between; align-items: center;
             background: rgba(0,0,0,0.8); border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 1000;
         }
-        .logo { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--neon-blue); letter-spacing: 3px; font-weight: bold; }
-        .nav-links a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; }
-        .nav-links a:hover { color: var(--neon-blue); }
+        .logo { font-family: 'Orbitron'; font-weight: 900; letter-spacing: 4px; color: var(--neon); font-size: 1.4rem; }
+        .nav-links a { color: #fff; text-decoration: none; margin-left: 25px; font-size: 0.8rem; font-weight: bold; transition: 0.3s; opacity: 0.7; }
+        .nav-links a:hover { opacity: 1; color: var(--neon); }
 
-        /* Hero Bölümü */
-        .hero { padding: 100px 8% 60px; text-align: center; }
-        .hero h1 { font-family: 'Orbitron'; font-size: 3.5rem; margin-bottom: 20px; background: linear-gradient(to right, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { color: #888; max-width: 700px; margin: 0 auto 40px; line-height: 1.6; }
+        /* Hero */
+        header { padding: 80px 8% 40px; text-align: center; }
+        header h1 { font-family: 'Orbitron'; font-size: clamp(2rem, 6vw, 4rem); margin-bottom: 15px; letter-spacing: -2px; }
+        header span { color: var(--neon); }
+        header p { color: #888; max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
 
-        /* Ana Dashboard Grid */
-        .container { padding: 0 8% 80px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        /* Dashboard Grid */
+        .main-container { padding: 40px 8%; display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
 
-        /* Kartlar */
-        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); height: 100%; }
-        h2 { font-family: 'Orbitron'; font-size: 1.1rem; margin-bottom: 20px; color: var(--neon-blue); display: flex; align-items: center; gap: 10px; }
-
-        /* Bot Butonu Tasarımı */
-        .bot-box { 
-            background: rgba(0,0,0,0.5); border-radius: 15px; padding: 40px; text-align: center;
-            border: 1px dashed var(--neon-blue); transition: 0.3s;
+        .card { 
+            background: var(--card); border: 1px solid var(--border); 
+            border-radius: 24px; padding: 30px; backdrop-filter: blur(20px);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .bot-box:hover { background: rgba(0, 242, 255, 0.05); }
-        .cta-button {
-            display: inline-block; padding: 18px 45px; background: var(--neon-blue); color: #000;
-            text-decoration: none; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold;
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); transition: 0.3s;
+        .card:hover { border-color: var(--neon); transform: translateY(-5px); }
+
+        /* Bot Alanı */
+        .bot-zone { 
+            background: rgba(0,0,0,0.4); border: 2px dashed var(--border); 
+            border-radius: 20px; padding: 50px; text-align: center; margin-top: 20px;
         }
-        .cta-button:hover { transform: scale(1.05); box-shadow: 0 0 40px var(--neon-blue); }
-
-        /* Tablolar ve Veriler */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; }
-        .badge { background: var(--neon-purple); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; }
-
-        /* Topluluk Paylaşımları */
-        .post { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 3px solid var(--neon-purple); }
-
-        /* Mobil Uyumluluk */
-        @media (max-width: 968px) {
-            .container { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2.2rem; }
+        .btn-connect {
+            display: inline-block; padding: 20px 50px; background: #fff; color: #000;
+            text-decoration: none; border-radius: 15px; font-family: 'Orbitron';
+            font-weight: 900; font-size: 1.1rem; transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2);
         }
+        .btn-connect:hover { background: var(--neon); transform: scale(1.05); box-shadow: 0 15px 45px rgba(0, 242, 255, 0.4); }
+
+        /* Sidebar Verileri */
+        .side-item { padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .side-item b { color: var(--neon); display: block; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 5px; }
+
+        /* Topluluk */
+        .post { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; margin-top: 15px; border-left: 4px solid var(--purple); }
+
+        @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <div class="background-overlay"></div>
+    <div class="bg-overlay"></div>
 
     <nav>
-        <div class="logo">İRONSOULAI</div>
+        <div class="logo">İRONSOUL</div>
         <div class="nav-links">
-            <a href="#analiz">Analiz</a>
+            <a href="#analiz">kuponAi</a>
             <a href="#topluluk">Topluluk</a>
-            <a href="#" style="color: var(--neon-blue);">Giriş Yap</a>
+            <a href="javascript:void(0)" onclick="alert('Üyelik Sistemi Çok Yakında!')" style="background:var(--neon); color:#000; padding:8px 15px; border-radius:8px;">GİRİŞ YAP</a>
         </div>
     </nav>
 
-    <header class="hero">
-        <h1>kuponAi PROTOCOL</h1>
-        <p>Yapay zeka odaklı analiz terminali ile spor dünyasındaki verileri kazanca dönüştürün. Hızlı, güvenilir ve tamamen dijital.</p>
-        <div style="display: flex; justify-content: center; gap: 20px;">
-            <div style="text-align: center;"><h4 style="color: var(--neon-blue); font-family: 'Orbitron';">%92</h4><span style="font-size: 0.7rem; color: #555;">İSABET</span></div>
-            <div style="text-align: center;"><h4 style="color: var(--neon-blue); font-family: 'Orbitron';">24/7</h4><span style="font-size: 0.7rem; color: #555;">TARAMA</span></div>
-        </div>
+    <header>
+        <h1>İRONSOUL<span>AI</span></h1>
+        <p>Yapay zeka odaklı veri işleme terminali. İstatistikleri kazanca dönüştürmek için kuponAi modülüne bağlanın.</p>
     </header>
 
-    <div class="container">
-        <div class="main-content">
+    <div class="main-container">
+        <div class="content">
             <div class="card" id="analiz">
-                <h2>🤖 ANALİZ MOTORU</h2>
-                <div class="bot-box">
-                    <p style="margin-bottom: 25px; color: #ccc;">kuponAi yapay zekasıyla anlık bağlantı kurun, lig analizlerini ve günün kuponlarını hemen alın.</p>
-                    <a href="https://poe.com/kuponAi" target="_blank" class="cta-button">BOTU BAŞLAT</a>
+                <h2 style="font-family:'Orbitron'; font-size: 1.2rem; color: var(--neon); margin-bottom: 10px;">CORE ENGINE</h2>
+                <p style="color:#666; font-size: 0.9rem;">Sistem durumu: <span style="color:#00ff00">ONLINE</span> | Versiyon: v5.0 Stable</p>
+                
+                <div class="bot-zone">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🤖</div>
+                    <h3 style="font-family:'Orbitron'; margin-bottom: 15px;">kuponAi BAĞLANTISI</h3>
+                    <p style="color:#aaa; margin-bottom: 30px; font-size: 0.9rem;">Analizler, sakatlık raporları ve günün banko tahminleri için terminali başlatın.</p>
+                    <a href="https://poe.com/kuponAi" target="_blank" class="btn-connect">ANALİZİ BAŞLAT</a>
                 </div>
 
-                <div style="margin-top: 40px;">
-                    <h2>👥 TOPLULUK AKIŞI</h2>
+                <div id="topluluk" style="margin-top: 40px;">
+                    <h2 style="font-family:'Orbitron'; font-size: 1rem;">TOPLULUK ANALİZLERİ</h2>
                     <div class="post">
-                        <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 5px;">@AnalistKral</div>
-                        <p style="font-size: 0.85rem; color: #aaa;">Yapay zekanın Bayern tahmini yine tuttu! Seri devam ediyor.</p>
-                    </div>
-                    <div class="post">
-                        <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 5px;">@VipBettr</div>
-                        <p style="font-size: 0.85rem; color: #aaa;">Gecenin kuponu hazır, kuponAi'ye onaylattım. Bol şans.</p>
+                        <b style="font-size: 0.8rem; color:var(--neon)">@Analiz_Ustasi:</b>
+                        <p style="font-size: 0.85rem; color:#ccc; margin-top:5px;">kuponAi'nin Dortmund tahmini kusursuz çalıştı. Akşam için hazırız!</p>
                     </div>
                 </div>
             </div>
@@ -121,18 +116,37 @@
 
         <div class="sidebar">
             <div class="card">
-                <h2>🏆 LİG ANALİZLERİ</h2>
-                <table>
-                    <tr><td>Süper Lig</td><td><span class="badge">AKTİF</span></td></tr>
-                    <tr><td>Premier League</td><td><span class="badge">AKTİF</span></td></tr>
-                    <tr><td>Bundesliga</td><td><span class="badge">AKTİF</span></td></tr>
-                    <tr><td>Champions League</td><td><span class="badge" style="background:var(--neon-blue); color:#000;">KRİTİK</span></td></tr>
-                </table>
-            </div>
+                <h2 style="font-family:'Orbitron'; font-size: 1rem; margin-bottom: 20px;">SİSTEM VERİLERİ</h2>
+                
+                <div class="side-item">
+                    <b>BAŞARI ORANI</b>
+                    <div style="font-size: 1.2rem; font-weight: 900;">%91.4</div>
+                </div>
+                
+                <div class="side-item">
+                    <b>AKTİF LİGLER</b>
+                    <p style="font-size: 0.85rem; color:#888;">Tüm Avrupa Ligleri, Türkiye Süper Ligi, NBA</p>
+                </div>
 
-            <div class="card" style="margin-top: 30px;">
-                <h2>📢 SİSTEM HABERLERİ</h2>
-                <p style="font-size: 0.8rem; color: #777; line-height: 1.6;">
-                    • v5.0 güncellemesi ile analiz hızı artırıldı.<br>
-                    • Yeni ligler sisteme entegre edildi.<br>
-                    • Üyelik sistemi yak
+                <div class="side-item">
+                    <b>GÜVEN ENDEKSİ</b>
+                    <div style="height: 6px; background:#111; border-radius: 3px; margin-top: 10px;">
+                        <div style="width: 88%; height: 100%; background:var(--neon); box-shadow: 0 0 15px var(--neon);"></div>
+                    </div>
+                </div>
+
+                <div class="side-item" style="border:none; margin-top: 20px;">
+                    <p style="font-size: 0.7rem; color:#444; line-height: 1.4;">
+                        *Bu platform bir yatırım tavsiyesi vermez. Yapay zeka verileri ihtimaller üzerine kuruludur.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align:center; padding: 40px; color:#222; font-size: 0.7rem; letter-spacing: 2px;">
+        DESIGNED BY IRONSOULAI PROTOCOL &copy; 2026
+    </footer>
+
+</body>
+</html>
