@@ -78,10 +78,22 @@
         }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        @media (max-width: 968px) {
-            .container { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2rem; }
+        /* YAPAY ZEKAYI KULLANMA BÖLÜMÜ */
+        .ai-bot {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px; border-radius: 10px; 
+            margin-top: 30px; text-align: center;
         }
+        .ai-bot input {
+            width: 80%; padding: 10px;
+            border-radius: 5px; border: 1px solid #ccc;
+        }
+        .ai-bot button {
+            padding: 10px 20px; margin-top: 10px; border-radius: 5px; border: none; background: var(--primary); color: white;
+            cursor: pointer; transition: background 0.3s;
+        }
+        .ai-bot button:hover { background: var(--accent); }
     </style>
 </head>
 <body>
@@ -142,11 +154,26 @@
         </div>
     </div>
 
+    <div class="ai-bot">
+        <h3 style="font-family: 'Orbitron'; color: var(--primary); margin-bottom: 15px;">Yapay Zeka Botu</h3>
+        <input type="text" id="userInput" placeholder="Sorunuzu yazın..." />
+        <button onclick="submitQuestion()">Gönder</button>
+        <div class="response" id="botResponse"></div>
+    </div>
+
     <a href="https://poe.com/kuponAi" target="_blank" class="bot-pulse">🤖</a>
 
     <footer style="text-align: center; padding: 60px; color: #222; font-size: 0.7rem; letter-spacing: 2px;">
         İRONSOULAI PROTOCOL &copy; 2026 | SECURED ACCESS ONLY
     </footer>
+
+    <script>
+        function submitQuestion() {
+            const userInput = document.getElementById('userInput').value;
+            document.getElementById('botResponse').innerText = "Cevap geliyor: " + userInput;
+            // Burada yapay zeka botunun cevap verme mantığı eklenebilir.
+        }
+    </script>
 
 </body>
 </html>
