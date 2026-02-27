@@ -3,177 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IronSoulAI | Professional AI Betting Analytics</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>IronSoulAI | Neural Analysis Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00f2ff;
-            --accent: #7000ff;
-            --bg: #02050a;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(0, 242, 255, 0.15);
+            --neon: #00f2ff;
+            --purple: #bc13fe;
+            --dark: #050505;
+            --card-bg: rgba(15, 15, 15, 0.8);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-
-        /* CANLI SKOR BANDI (TICKER) */
-        .ticker-wrap {
-            width: 100%; overflow: hidden; background: rgba(0,0,0,0.8);
-            border-bottom: 1px solid var(--primary); padding: 10px 0;
-            white-space: nowrap; font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        
+        body { 
+            background: var(--dark); 
+            color: #fff; 
+            font-family: 'JetBrains+Mono', monospace;
+            overflow: hidden; /* Scroll yerine terminal hissi */
+            height: 100vh;
         }
-        .ticker { display: inline-block; animation: ticker 30s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 30px; border-right: 1px solid #333; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* NAVİGASYON */
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 8%; background: rgba(2, 5, 10, 0.9);
-            backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;
+        /* ARKA PLAN EFEKTİ */
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
         }
-        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 700; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 3px; }
+        @keyframes gridMove { from { transform: translateY(0); } to { transform: translateY(50px); } }
 
-        /* PREMIUM HERO SECTION */
-        .hero {
-            padding: 100px 8% 50px; text-align: center;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
-        }
-        .hero h1 { font-family: 'Orbitron', sans-serif; font-size: 3rem; margin-bottom: 20px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.3); }
-        .hero p { color: #888; max-width: 600px; margin: 0 auto 30px; font-size: 1.1rem; }
+        /* ANA YAPI */
+        .wrapper { display: grid; grid-template-columns: 280px 1fr 320px; height: 100vh; gap: 10px; padding: 10px; }
 
-        /* DASHBOARD GRID */
-        .container { padding: 40px 8%; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        /* SIDEBAR */
+        aside { 
+            background: var(--card-bg); border: 1px solid rgba(0,242,255,0.1); 
+            border-radius: 15px; padding: 30px; display: flex; flex-direction: column; gap: 20px;
+        }
 
-        .card {
-            background: var(--glass); border: 1px solid var(--border);
-            border-radius: 24px; padding: 30px; backdrop-filter: blur(15px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: 0.4s;
-        }
-        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .status-light { width: 10px; height: 10px; background: #00ff00; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #00ff00; }
 
-        .btn-ai {
-            display: inline-block; width: 100%; padding: 20px; margin-top: 20px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            color: #000; font-family: 'Orbitron', sans-serif; font-weight: 700;
-            text-decoration: none; border-radius: 12px; text-align: center;
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.4); transition: 0.3s;
+        /* ANA PANEL */
+        main { display: grid; grid-template-rows: auto 1fr; gap: 10px; }
+        
+        .header-bar { 
+            background: var(--card-bg); border: 1px solid rgba(0,242,255,0.1);
+            border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center;
         }
-        .btn-ai:hover { letter-spacing: 2px; box-shadow: 0 0 50px var(--primary); }
 
-        /* STATS BOX */
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .stat-card h4 { color: var(--primary); font-family: 'Orbitron'; font-size: 1.2rem; }
-        .stat-card span { font-size: 0.7rem; color: #555; text-transform: uppercase; }
+        .main-display {
+            background: rgba(0,0,0,0.5); border: 1px solid var(--neon);
+            border-radius: 15px; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background-image: url('tema.jpg'); background-size: cover; background-position: center;
+        }
 
-        /* FLOATING ELEMENT */
-        .bot-pulse {
-            position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px;
-            background: var(--primary); border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-size: 1.8rem;
-            box-shadow: 0 0 30px var(--primary); cursor: pointer; z-index: 1000;
-            animation: float 3s ease-in-out infinite;
+        .overlay { 
+            position: absolute; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(2px); 
         }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* YAPAY ZEKAYI KULLANMA BÖLÜMÜ */
-        .ai-bot {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 20px; border-radius: 10px; 
-            margin-top: 30px; text-align: center;
+        /* BUTONLAR */
+        .cyber-btn {
+            position: relative; z-index: 10; padding: 20px 40px;
+            background: transparent; border: 2px solid var(--neon);
+            color: var(--neon); font-family: 'Orbitron'; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 5px; transition: 0.3s;
+            text-decoration: none; overflow: hidden;
         }
-        .ai-bot input {
-            width: 80%; padding: 10px;
-            border-radius: 5px; border: 1px solid #ccc;
+        .cyber-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 50px var(--neon); }
+
+        /* SAĞ PANEL: VERİ AKIŞI */
+        .data-panel { 
+            background: var(--card-bg); border: 1px solid rgba(0,242,255,0.1);
+            border-radius: 15px; padding: 20px; display: flex; flex-direction: column; gap: 15px;
         }
-        .ai-bot button {
-            padding: 10px 20px; margin-top: 10px; border-radius: 5px; border: none; background: var(--primary); color: white;
-            cursor: pointer; transition: background 0.3s;
+
+        .data-row { font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        .data-row span { color: var(--neon); }
+
+        /* LOGO */
+        .logo { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+
+        @media (max-width: 1000px) {
+            .wrapper { grid-template-columns: 1fr; overflow-y: auto; }
+            aside, .data-panel { display: none; }
+            .main-display { height: 400px; }
         }
-        .ai-bot button:hover { background: var(--accent); }
     </style>
 </head>
 <body>
 
-    <div class="ticker-wrap">
-        <div class="ticker">
-            <span class="ticker-item">🔴 LIVE: Real Madrid 2 - 1 Man City</span>
-            <span class="ticker-item">🟢 SUCCESS: Arsenal - MS 1 ✅</span>
-            <span class="ticker-item">🟡 PENDING: G.Saray - Beşiktaş | 2.5 ÜST</span>
-            <span class="ticker-item">🔴 LIVE: Milan 0 - 0 Inter</span>
-            <span class="ticker-item">🟢 SUCCESS: Fenerbahçe - 1.5 ÜST ✅</span>
-        </div>
-    </div>
+    <div class="bg-grid"></div>
 
-    <nav>
-        <div class="logo">İRONSOULAI</div>
-        <div style="font-size: 0.8rem; color: var(--primary); font-weight: bold;">[ PREMIUM ACCESS ]</div>
-    </nav>
+    <div class="wrapper">
+        <aside>
+            <div class="logo">IRON SOUL</div>
+            <div style="font-size: 0.8rem; color: #555;">NEURAL TERMINAL v4.0</div>
+            
+            <nav style="margin-top: 40px; display: flex; flex-direction: column; gap: 15px;">
+                <div class="data-row">SYSTEM STATUS: <span class="status-light"></span></div>
+                <div class="data-row">AI CORE: <span>READY</span></div>
+                <div class="data-row">UPTIME: <span>99.9%</span></div>
+            </nav>
 
-    <header class="hero">
-        <h1>KUPONAI INTELLIGENCE</h1>
-        <p>Geleceği tahmin etmiyoruz, onu verilerle inşa ediyoruz. Yapay zeka destekli en gelişmiş spor analiz laboratuvarına hoş geldiniz.</p>
-        <div class="stat-grid" style="max-width: 500px; margin: 0 auto;">
-            <div class="stat-card"><h4>%88.4</h4><span>Başarı Oranı</span></div>
-            <div class="stat-card"><h4>2.4k</h4><span>Günlük Analiz</span></div>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="card">
-            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px; color: var(--primary);">🤖 CORE ANALYTICS</h2>
-            <div style="position: relative; border-radius: 15px; overflow: hidden; margin-bottom: 25px;">
-                <img src="tema.jpg" alt="IronSoulAI Banner" style="width: 100%; display: block; filter: brightness(0.6);">
-                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
-                    <a href="https://poe.com/kuponAi" target="_blank" class="btn-ai" style="width: 80%; margin: 0 auto;">kuponAi MODÜLÜNÜ ÇALIŞTIR</a>
-                </div>
+            <div style="margin-top: auto; font-size: 0.7rem; color: #333;">
+                ACCESS LEVEL: <span style="color: var(--purple)">ADMINISTRATOR</span>
             </div>
-            <p style="font-size: 0.9rem; color: #666; text-align: center;">Yapay zeka motoruna bağlanarak kişiselleştirilmiş analiz raporu oluşturun.</p>
-        </div>
+        </aside>
 
-        <div class="side-panel">
-            <div class="card" style="margin-bottom: 20px;">
-                <h3 style="font-family: 'Orbitron'; font-size: 1rem; color: var(--accent); margin-bottom: 15px;">TOPLULUK SESİ</h3>
-                <div style="font-size: 0.85rem; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 10px; border-left: 2px solid var(--accent);">
-                    "AI bugün Dortmund maçını bildi, kasa katlandı!" - <b>User_X</b>
-                </div>
+        <main>
+            <div class="header-bar">
+                <div style="font-family: 'Orbitron'; font-size: 0.9rem;">MARKET ANALYZER</div>
+                <div style="color: #666; font-size: 0.8rem;" id="clock">19:34:02</div>
             </div>
 
-            <div class="card">
-                <h3 style="font-family: 'Orbitron'; font-size: 1rem; color: var(--primary); margin-bottom: 15px;">SİSTEM RAPORU</h3>
-                <p style="font-size: 0.8rem; color: #888;"><b>Sunucu:</b> Frankfurt-1</p>
-                <p style="font-size: 0.8rem; color: #888;"><b>Versiyon:</b> v4.2 Private</p>
-                <div style="margin-top: 15px; height: 2px; background: #111; position: relative;">
-                    <div style="position: absolute; width: 88%; height: 100%; background: var(--primary); box-shadow: 0 0 10px var(--primary);"></div>
-                </div>
-                <p style="font-size: 0.7rem; margin-top: 5px; text-align: right;">GÜVEN ENDEKSİ: 88%</p>
+            <div class="main-display">
+                <div class="overlay"></div>
+                <h2 style="font-family: 'Orbitron'; z-index: 10; margin-bottom: 30px; letter-spacing: 10px; text-align: center;">kuponAi ENGINE</h2>
+                <a href="https://poe.com/kuponAi" target="_blank" class="cyber-btn">BAĞLANTIYI KUR</a>
             </div>
-        </div>
-    </div>
+        </main>
 
-    <div class="ai-bot">
-        <h3 style="font-family: 'Orbitron'; color: var(--primary); margin-bottom: 15px;">Yapay Zeka Botu</h3>
-        <input type="text" id="userInput" placeholder="Sorunuzu yazın..." />
-        <button onclick="submitQuestion()">Gönder</button>
-        <div class="response" id="botResponse"></div>
-    </div>
-
-    <a href="https://poe.com/kuponAi" target="_blank" class="bot-pulse">🤖</a>
-
-    <footer style="text-align: center; padding: 60px; color: #222; font-size: 0.7rem; letter-spacing: 2px;">
-        İRONSOULAI PROTOCOL &copy; 2026 | SECURED ACCESS ONLY
-    </footer>
-
-    <script>
-        function submitQuestion() {
-            const userInput = document.getElementById('userInput').value;
-            document.getElementById('botResponse').innerText = "Cevap geliyor: " + userInput;
-            // Burada yapay zeka botunun cevap verme mantığı eklenebilir.
-        }
-    </script>
-
-</body>
-</html>
+        <div class="data-panel">
+            <h3 style="font-family: 'Orbitron'; font-size: 0.8rem; margin-bottom: 10px; color: var(--purple);">LIVE STREAM</h3>
+            <div class="data-row">SCANNING: <span>PREMIER LEAGUE...</span></div>
+            <div class="data-row">MATCH: <span>ARS vs LIV</span></div>
+            <div class="data-row">PRO
